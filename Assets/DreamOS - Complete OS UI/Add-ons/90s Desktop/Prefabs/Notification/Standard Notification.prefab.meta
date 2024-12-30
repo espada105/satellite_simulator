@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 919b06ba30b9fca49a3e5f7a16d8c0ed
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Prefabs/Notification/Standard
+    Notification.prefab
+  uploadId: 637922

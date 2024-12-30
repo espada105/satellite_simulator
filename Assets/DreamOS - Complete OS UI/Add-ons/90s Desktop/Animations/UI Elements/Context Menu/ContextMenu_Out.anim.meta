@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a06b5ac8d7c75c147adaf375a1fb439f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/UI Elements/Context
+    Menu/ContextMenu_Out.anim
+  uploadId: 637922

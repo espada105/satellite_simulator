@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 274415d911b8f6f4094073aeec6dfc1f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/Notifications/PopupNotification.controller
+  uploadId: 637922

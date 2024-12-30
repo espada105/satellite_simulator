@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c44f5303726f25a4e9c017a748516877
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/UI Elements/Selectors/HorizontalSelector_Idle.anim
+  uploadId: 637922

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b806cb8337eeec54690fb9997becb965
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/Setup
+    Screen/StepPanel.controller
+  uploadId: 637922

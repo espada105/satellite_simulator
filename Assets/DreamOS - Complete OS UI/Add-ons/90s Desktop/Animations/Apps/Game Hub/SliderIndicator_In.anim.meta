@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b87a2a6c4ff24764f871b282532c8bf1
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/Apps/Game
+    Hub/SliderIndicator_In.anim
+  uploadId: 637922

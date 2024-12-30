@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 3fce9a219230e5e47ba3e58be636fd1c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/Apps/Music
+    Player/PlayAndPauseButton.controller
+  uploadId: 637922

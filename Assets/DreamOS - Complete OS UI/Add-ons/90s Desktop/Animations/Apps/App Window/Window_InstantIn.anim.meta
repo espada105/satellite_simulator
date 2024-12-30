@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 526f37f436173884fb6544e53db43f53
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/Apps/App
+    Window/Window_InstantIn.anim
+  uploadId: 637922

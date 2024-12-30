@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 8d579ca14353d42458635b639fdfcfb0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/Lock
+    Screen/LockScreen_Start.anim
+  uploadId: 637922

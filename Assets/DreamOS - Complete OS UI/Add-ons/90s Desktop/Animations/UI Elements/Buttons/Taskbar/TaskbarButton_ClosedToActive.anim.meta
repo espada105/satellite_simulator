@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1c77766756f5ef64b990baf4dca10398
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 267669
+  packageName: DreamOS - 90s Desktop (Add-on)
+  packageVersion: 1.0.0
+  assetPath: Assets/DreamOS - Complete OS UI/Add-ons/90s Desktop/Animations/UI Elements/Buttons/Taskbar/TaskbarButton_ClosedToActive.anim
+  uploadId: 637922

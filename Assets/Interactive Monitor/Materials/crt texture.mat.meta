@@ -1,7 +1,8 @@
 fileFormatVersion: 2
-guid: 99c9720ab356a0642a771bea13969a05
-DefaultImporter:
+guid: 66eb2d323e6ddbb4e86a3d93c271c2c7
+NativeFormatImporter:
   externalObjects: {}
+  mainObjectFileID: 2100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
@@ -10,5 +11,5 @@ AssetOrigin:
   productId: 123558
   packageName: Customize Monitor Interface
   packageVersion: 1.0
-  assetPath: Assets/Scenes/SampleScene.unity
+  assetPath: Assets/Interactive Monitor/Materials/crt texture.mat
   uploadId: 259300

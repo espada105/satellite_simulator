@@ -10,6 +10,12 @@ public class UIManager : MonoBehaviour
     public TMP_Text terminalText;
     public GameObject simulatorWindow;
 
+    public GameObject camScreen;
+    public GameObject radarScreen;
+    public TMP_Text modeText;
+
+    private bool isCamMode = true;
+
     void Start( )
     {
         StartAnimation( );
@@ -44,5 +50,27 @@ public class UIManager : MonoBehaviour
         DOVirtual.DelayedCall( 1f, ( ) => {
             target.SetActive( false );
         } );
+    }
+
+    public void SwitchToCamMode( )
+    {
+        if ( !isCamMode )
+        {
+            isCamMode = true;
+            camScreen.SetActive( true );
+            radarScreen.SetActive( false);
+            modeText.text = "Camera Mode";
+        }
+    }
+
+    public void SwitchToRadarMode( )
+    {
+        if ( isCamMode )
+        {
+            isCamMode = false;
+            camScreen.SetActive( false );
+            radarScreen.SetActive( true );
+            modeText.text = "Radar Mode";
+        }
     }
 }

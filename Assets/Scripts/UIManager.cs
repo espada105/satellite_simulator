@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     private void StartAnimation( )
     {
-        DOVirtual.DelayedCall( 5f, ( ) => {
+        DOVirtual.DelayedCall( 7f, ( ) => {
             mainCanvas.SetActive( true );
             DOVirtual.DelayedCall( 6f, ( ) => {
                 FadeOutObject( loadBar );

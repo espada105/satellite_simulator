@@ -1,57 +1,33 @@
+using System.Collections; // IEnumerator를 사용하기 위한 네임스페이스
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI; // UnityEngine.UI 추가
-using TMPro; // TextMeshPro 사용 시 추가
+using TMPro;
 
 public class SiftFeatureMatching : MonoBehaviour
 {
-    public string pythonFilePath = "C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/ImageProcessing.py";
-    public string image1Path = "C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/Ralo.jpg";
-    public string image2Path = "C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/Ralo5.png";
-    public string outputPath = "C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/output.json";
+    public string pythonFilePath;
+    public string image1Path;
+    public string image2Path;
+    public string outputPath;
 
-    public TextMeshProUGUI matchPercentageText; // TextMeshPro 텍스트 연결
-    // 또는 기본 UI 텍스트를 사용할 경우:
-    // public Text matchPercentageText;
+    public TextMeshProUGUI matchPercentageText;
 
     void Start()
     {
-        RunPythonScript();
+        // Python 스크립트를 먼저 실행하고 결과를 처리
+        StartCoroutine(RunPythonAndUpdateUI());
     }
-    void RunPythonScript()
+
+    IEnumerator RunPythonAndUpdateUI()
     {
-        ProcessStartInfo start = new ProcessStartInfo
-        {
-            FileName = "C:/Python313/python.exe", //파이썬 경로
-            Arguments = $"{pythonFilePath} {image1Path} {image2Path} {outputPath}",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true
-        };
+        // Python 실행
+        yield return StartCoroutine(RunPythonScript());
 
-        using (Process process = Process.Start(start))
+        // JSON 읽기 및 UI 업데이트
+        if (File.Exists(Path.GetFullPath(outputPath)))
         {
-            using (StreamReader reader = process.StandardOutput)
-            {
-                string result = reader.ReadToEnd();
-                UnityEngine.Debug.Log("Python Output: " + result);
-            }
-
-            using (StreamReader errorReader = process.StandardError)
-            {
-                string errors = errorReader.ReadToEnd();
-                if (!string.IsNullOrEmpty(errors))
-                {
-                    UnityEngine.Debug.LogError("Python Errors: " + errors);
-                }
-            }
-        }
-
-        if (File.Exists(outputPath))
-        {
-            string jsonContent = File.ReadAllText(outputPath);
+            string jsonContent = File.ReadAllText(Path.GetFullPath(outputPath));
             SiftOutput result = JsonUtility.FromJson<SiftOutput>(jsonContent);
 
             UnityEngine.Debug.Log($"Keypoints in Image1: {result.keypoints1}");
@@ -59,7 +35,6 @@ public class SiftFeatureMatching : MonoBehaviour
             UnityEngine.Debug.Log($"Good Matches: {result.good_matches}");
             UnityEngine.Debug.Log($"Match Percentage: {result.match_percentage}%");
 
-            // UI 텍스트에 매칭 퍼센트 표시
             if (matchPercentageText != null)
             {
                 matchPercentageText.text = $"Match Percentage: {result.match_percentage:F2}%";
@@ -67,8 +42,60 @@ public class SiftFeatureMatching : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("Python result file not found: " + outputPath);
+            UnityEngine.Debug.LogError("Python result file not found: " + Path.GetFullPath(outputPath));
         }
+    }
+
+    IEnumerator RunPythonScript()
+    {
+        string fullPythonFilePath = Path.GetFullPath(pythonFilePath);
+        string fullImage1Path = Path.GetFullPath(image1Path);
+        string fullImage2Path = Path.GetFullPath(image2Path);
+        string fullOutputPath = Path.GetFullPath(outputPath);
+
+        string venvPythonPath = Path.GetFullPath("Assets/PythonScripts/.venv/Scripts/python.exe");
+
+        ProcessStartInfo start = new ProcessStartInfo
+        {
+            FileName = venvPythonPath,
+            Arguments = $"{fullPythonFilePath} {fullImage1Path} {fullImage2Path} {fullOutputPath}",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true
+        };
+
+        bool isCompleted = false;
+
+        try
+        {
+            using (Process process = Process.Start(start))
+            {
+                process.OutputDataReceived += (sender, args) => UnityEngine.Debug.Log("Python Output: " + args.Data);
+                process.ErrorDataReceived += (sender, args) => UnityEngine.Debug.LogError("Python Errors: " + args.Data);
+
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                process.WaitForExit();
+                isCompleted = true;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            UnityEngine.Debug.LogError("Failed to run Python script: " + ex.Message);
+        }
+
+        if (isCompleted)
+        {
+            UnityEngine.Debug.Log("Python script executed successfully.");
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("Python script execution failed.");
+        }
+
+        yield return null;
     }
 
     [System.Serializable]

@@ -514,7 +514,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 528718393}
-  - component: {fileID: 528718392}
+  - component: {fileID: 528718394}
   m_Layer: 0
   m_Name: SiftFeatureMatching
   m_TagString: Untagged
@@ -522,23 +522,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &528718392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 528718391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db95b67b4fa0e8546a5447c7637ecc78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pythonFilePath: C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/ImageProcessing.py
-  image1Path: C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/Ralo.jpg
-  image2Path: C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/Ralo5.png
-  outputPath: C:/GitHubRepo/satellite_simulator/Assets/PythonScripts/output.json
-  matchPercentageText: {fileID: 861430576}
 --- !u!4 &528718393
 Transform:
   m_ObjectHideFlags: 0
@@ -555,6 +538,23 @@ Transform:
   - {fileID: 440697973}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &528718394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528718391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db95b67b4fa0e8546a5447c7637ecc78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pythonFilePath: Assets/PythonScripts/ImageProcessing.py
+  image1Path: Assets/PythonScripts/Ralo.jpg
+  image2Path: Assets/PythonScripts/Ralo2.jpg
+  outputPath: Assets/PythonScripts/.venv/output.json
+  matchPercentageText: {fileID: 861430576}
 --- !u!1001 &553742027
 PrefabInstance:
   m_ObjectHideFlags: 0

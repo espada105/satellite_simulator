@@ -551,8 +551,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pythonFilePath: Assets/PythonScripts/ImageProcessing.py
   image1Path: Assets/PythonScripts/Ralo.jpg
-  image2Path: Assets/PythonScripts/Ralo2.jpg
-  outputPath: Assets/PythonScripts/.venv/output.json
+  image2Path: Assets/PythonScripts/Ralo.jpg
+  outputPath: Assets/Resources/output.json
   matchPercentageText: {fileID: 861430576}
 --- !u!1001 &553742027
 PrefabInstance:

@@ -19,7 +19,6 @@ public class SiftFeatureMatching : MonoBehaviour
     {
         RunPythonScript();
     }
-
     void RunPythonScript()
     {
         ProcessStartInfo start = new ProcessStartInfo

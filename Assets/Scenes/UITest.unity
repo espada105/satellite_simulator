@@ -688,7 +688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257530316236, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257530316237, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_Pivot.x
@@ -852,11 +852,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257961318515, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257961318515, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 800
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257961318515, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2251,7 +2251,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &620854089
 MonoBehaviour:
   m_ObjectHideFlags: 0

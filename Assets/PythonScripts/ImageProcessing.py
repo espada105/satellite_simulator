@@ -1,6 +1,7 @@
 import cv2
+import json
 
-def feature_matching_with_sift(image1_path, image2_path):
+def feature_matching_with_sift(image1_path, image2_path, output_path):
     image1 = cv2.imread(image1_path, cv2.IMREAD_GRAYSCALE)
     image2 = cv2.imread(image2_path, cv2.IMREAD_GRAYSCALE)
 
@@ -31,12 +32,26 @@ def feature_matching_with_sift(image1_path, image2_path):
     print(f"Match Percentage: {match_percentage:.2f}%")
 
     result = cv2.drawMatches(image1, keypoints1, image2, keypoints2, good_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-
     cv2.imshow("SIFT Feature Matching", result)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-image1_path = r"Ralo.jpg"
-image2_path = r"Ralo5.png"
+    # JSON 결과 저장
+    result_data = {
+        "keypoints1": len(keypoints1),
+        "keypoints2": len(keypoints2),
+        "good_matches": len(good_matches),
+        "match_percentage": match_percentage
+    }
 
-feature_matching_with_sift(image1_path, image2_path)
+    with open(output_path, "w") as f:
+        json.dump(result_data, f)
+
+    print(f"Results saved to {output_path}")
+
+# 이미지 경로 및 JSON 저장 경로
+image1_path = r"C:\GitHubRepo\satellite_simulator\Assets\PythonScripts\Ralo.jpg"
+image2_path = r"C:\GitHubRepo\satellite_simulator\Assets\PythonScripts\Ralo3.jpg"
+output_path = "output.json"
+
+feature_matching_with_sift(image1_path, image2_path, output_path)

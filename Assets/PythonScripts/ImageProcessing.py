@@ -3,8 +3,9 @@ import sys
 import os
 
 def activate_and_run():
-    # 가상환경 경로 설정
-    venv_python = r"C:\Users\cwj27\Documents\Github\satellite_simulator\Assets\PythonScripts\.venv\Scripts\python.exe"
+    # 현재 스크립트가 있는 디렉토리를 기준으로 가상환경 경로 설정
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    venv_python = os.path.join(script_dir, ".venv", "Scripts", "python.exe")
 
     # 스크립트 경로 설정
     script_path = os.path.abspath(__file__)
@@ -13,7 +14,10 @@ def activate_and_run():
     subprocess.run([venv_python, script_path], check=True)
 
 if __name__ == "__main__":
-    if sys.prefix != r"C:\Users\cwj27\Documents\Github\satellite_simulator\Assets\PythonScripts\.venv":
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    venv_path = os.path.join(script_dir, ".venv")
+
+    if sys.prefix != venv_path:
         # 현재 Python이 가상환경이 아닌 경우, 가상환경으로 스크립트 실행
         activate_and_run()
     else:
@@ -69,9 +73,9 @@ if __name__ == "__main__":
 
             print(f"Results saved to {output_path}")
 
-        # 이미지 경로 및 JSON 저장 경로
-        image1_path = r"C:\Users\cwj27\Documents\Github\satellite_simulator\Assets\PythonScripts\Ralo.jpg"
-        image2_path = r"C:\Users\cwj27\Documents\Github\satellite_simulator\Assets\PythonScripts\Ralo.jpg"
-        output_path = r"C:\Users\cwj27\Documents\Github\satellite_simulator\Assets\Resources\output.json"
+        # 이미지 경로 및 JSON 저장 경로를 상대 경로로 설정
+        image1_path = os.path.join(script_dir, "Ralo.jpg")
+        image2_path = os.path.join(script_dir, "Ralo.jpg")
+        output_path = os.path.join(script_dir, "..", "Resources", "output.json")  # Resources 폴더에 저장
 
         feature_matching_with_sift(image1_path, image2_path, output_path)

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 using TMPro;
+using Debug = UnityEngine.Debug;  // UnityEngine.Debug를 Debug로 명시적 사용
 
 public class SiftFeatureMatching : MonoBehaviour
 {
@@ -53,11 +54,12 @@ public class SiftFeatureMatching : MonoBehaviour
         string fullImage2Path = Path.GetFullPath(image2Path);
         string fullOutputPath = Path.GetFullPath(outputPath);
 
-        string venvPythonPath = Path.GetFullPath("Assets/PythonScripts/.venv/Scripts/python.exe");
+        string pythonPath = PythonPathFinder.GetPythonPath( );
+        Debug.Log( "Current Python Path : " + pythonPath );
 
         ProcessStartInfo start = new ProcessStartInfo
         {
-            FileName = venvPythonPath,
+            FileName = pythonPath,
             Arguments = $"{fullPythonFilePath} {fullImage1Path} {fullImage2Path} {fullOutputPath}",
             UseShellExecute = false,
             RedirectStandardOutput = true,

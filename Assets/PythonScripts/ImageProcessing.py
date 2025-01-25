@@ -2,18 +2,76 @@ import subprocess
 import sys
 import os
 
+def install_dependencies(venv_python):
+    """필요한 모듈 설치 및 디버깅 정보 출력"""
+    required_packages = ["opencv-python", "opencv-contrib-python", "numpy"]
+    
+    try:
+        # 현재 설치된 패키지 목록 가져오기
+        print("Checking installed packages...")
+        result = subprocess.run(
+            [venv_python, "-m", "pip", "list"],
+            stdout=subprocess.PIPE,
+            text=True,
+            check=True
+        )
+        installed_packages = result.stdout
+        print("Currently installed packages:")
+        print(installed_packages)
+        
+        # 부족한 패키지 확인
+        missing_packages = []
+        for package in required_packages:
+            if package not in installed_packages:
+                missing_packages.append(package)
+        
+        if missing_packages:
+            print(f"Missing packages detected: {missing_packages}")
+        else:
+            print("All required packages are already installed.")
+        
+        # pip 업그레이드
+        print("Upgrading pip...")
+        subprocess.run([venv_python, "-m", "pip", "install", "--upgrade", "pip"], check=True)
+        
+        # 필요한 패키지 설치
+        if missing_packages:
+            print(f"Installing missing packages: {missing_packages}")
+            subprocess.run([venv_python, "-m", "pip", "install"] + missing_packages, check=True)
+        
+        print("Dependencies installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred during installation: {e}")
+        sys.exit(1)
+
+def create_virtual_environment(venv_path):
+    """가상환경 생성"""
+    try:
+        subprocess.run([sys.executable, "-m", "venv", venv_path], check=True)
+        print(f"Virtual environment created at {venv_path}")
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred while creating virtual environment: {e}")
+        sys.exit(1)
+
 def activate_and_run():
     # 현재 스크립트가 있는 디렉토리를 기준으로 가상환경 경로 설정
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    venv_python = os.path.join(script_dir, ".venv", "Scripts", "python.exe")
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # 코드 위치
+    venv_path = os.path.join(script_dir, ".venv")  # .venv는 Assets/PythonScripts/ 내에서 생성되도록 설정
+    venv_python = os.path.join(venv_path, "Scripts", "python.exe") if os.name == "nt" else os.path.join(venv_path, "bin", "python")
 
-    # 스크립트 경로 설정
-    script_path = os.path.abspath(__file__)
+    # 가상환경이 없으면 생성
+    if not os.path.exists(venv_path):
+        print("Virtual environment not found. Creating one...")
+        create_virtual_environment(venv_path)
+
+    # 의존성 설치
+    install_dependencies(venv_python)
 
     # subprocess를 사용하여 가상환경 Python으로 현재 스크립트를 다시 실행
-    subprocess.run([venv_python, script_path], check=True)
+    subprocess.run([venv_python, os.path.abspath(__file__)], check=True)
 
 if __name__ == "__main__":
+    # 스크립트 경로 기준으로 가상환경 경로 설정
     script_dir = os.path.dirname(os.path.abspath(__file__))
     venv_path = os.path.join(script_dir, ".venv")
 

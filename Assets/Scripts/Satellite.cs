@@ -54,20 +54,26 @@ public class Satellite : MonoBehaviour
 
     public Vector2[] GetDistances()
     {
-        Vector2[] result = new Vector2[objectsInRadar.Count];
-        for(int i = 0; i < objectsInRadar.Count; i++)
-            result[i] = CalculateDistance( objectsInRadar[i] );
+        List<Vector2> validDistances = new List<Vector2>();
+        
+        foreach(Transform target in objectsInRadar)
+        {
+            Vector2? distance = CalculateDistance(target);
+            if (distance.HasValue)
+                validDistances.Add(distance.Value);
+        }
 
-        return result;
+        return validDistances.ToArray();
     }
 
-    private Vector2 CalculateDistance(Transform target)
+    private Vector2? CalculateDistance(Transform target)
     {
         Vector3 relativePosition = target.position - transform.position;
         
-        float maxDistance = collider.radius;
-        float normalizedX = (relativePosition.x / maxDistance) * 125f;
-        float normalizedZ = (relativePosition.z / maxDistance) * 125f;
+        float normalizedX = Mathf.Clamp(relativePosition.x / collider.radius, -1f, 1f) * 125f;
+        float normalizedZ = Mathf.Clamp(relativePosition.z / collider.radius, -1f, 1f) * 125f;
+        
+        Vector3 normalized = new Vector3(normalizedX, 0, normalizedZ);
         
         return new Vector2(normalizedX, normalizedZ);
     }

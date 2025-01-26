@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         InitializeRadarPool();
-        StartAnimation();
+        // StartAnimation();
         StartCoroutine(UpdateRadar());
     }
 
@@ -129,7 +129,7 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator UpdateRadar()
     {
-        WaitForSeconds wait = new WaitForSeconds(0.1f);
+        WaitForSeconds wait = new WaitForSeconds(0.2f);
         while (true)
         {
             if (radarScreen.activeSelf)

@@ -374,7 +374,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 15
+  m_Radius: 62.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &42015726
 PrefabInstance:
@@ -3094,7 +3094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1272045156
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3347,11 +3347,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectPrefab: {fileID: 3719656141535867675, guid: 665190847431bad4fb97e9a63f1ad07e, type: 3}
   center: {fileID: 2005359498}
-  minSpawnRadius: 600
-  maxSpawnRadius: 700
-  objectCount: 20
-  minOrbitSpeed: 10
-  maxOrbitSpeed: 50
+  minSpawnRadius: 650
+  maxSpawnRadius: 750
+  objectCount: 100
+  minOrbitSpeed: 2
+  maxOrbitSpeed: 2
 --- !u!4 &1384229303
 Transform:
   m_ObjectHideFlags: 0
@@ -4147,7 +4147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257530316236, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257530316237, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_Pivot.x
@@ -4311,11 +4311,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257961318515, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257961318515, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 800
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5907462257961318515, guid: d8bd5cc38b1aa7f4eb25c04be03c9f32, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4615,7 +4615,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 250}
+  m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1828086322
 MonoBehaviour:
@@ -4754,7 +4754,7 @@ MonoBehaviour:
   - {fileID: 1751658202, guid: 8f38522608743cd46b5dc5d5b99e0681, type: 3}
   image: {fileID: 1828086322}
   idx: 0
-  speed: 0.5
+  speed: 0.1
 --- !u!1 &1873259346
 GameObject:
   m_ObjectHideFlags: 0

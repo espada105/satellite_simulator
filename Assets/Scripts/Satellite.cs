@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SatelliteOrbit : MonoBehaviour
+public class Satellite : MonoBehaviour
 {
     public Transform EarthManager;
     public float orbitSpeed = 5f;

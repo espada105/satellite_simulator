@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System.Collections.Generic;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,9 +18,28 @@ public class UIManager : MonoBehaviour
 
     private bool isCamMode = true;
 
-    void Start( )
+    public GameObject radarPrefab;
+    public GameObject[] radarInstances;
+    public Transform radarSprite;
+
+    private Queue<GameObject> radarPool = new Queue<GameObject>();
+    private const int INITIAL_POOL_SIZE = 10;
+
+    void Start()
     {
-        StartAnimation( );
+        InitializeRadarPool();
+        StartAnimation();
+        StartCoroutine(UpdateRadar());
+    }
+
+    private void InitializeRadarPool()
+    {
+        for (int i = 0; i < INITIAL_POOL_SIZE; i++)
+        {
+            GameObject radar = Instantiate(radarPrefab, radarSprite);
+            radar.SetActive(false);
+            radarPool.Enqueue(radar);
+        }
     }
 
     private void StartAnimation( )
@@ -71,6 +92,49 @@ public class UIManager : MonoBehaviour
             camScreen.SetActive( false );
             radarScreen.SetActive( true );
             modeText.text = "Radar Mode";
+        }
+    }
+
+    public void SetRadar(Vector2[] targets)
+    {
+        if (radarInstances != null)
+        {
+            foreach (GameObject radar in radarInstances)
+            {
+                if (radar != null)
+                {
+                    radar.SetActive(false);
+                    radarPool.Enqueue(radar);
+                }
+            }
+        }
+
+        radarInstances = new GameObject[targets.Length];
+
+        while (radarPool.Count < targets.Length)
+        {
+            GameObject radar = Instantiate(radarPrefab, radarSprite);
+            radar.SetActive(false);
+            radarPool.Enqueue(radar);
+        }
+
+        for (int i = 0; i < targets.Length; i++)
+        {
+            GameObject radar = radarPool.Dequeue();
+            radar.transform.localPosition = new Vector3(targets[i].x, targets[i].y, 0f);
+            radar.SetActive(true);
+            radarInstances[i] = radar;
+        }
+    }
+
+    private IEnumerator UpdateRadar()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.1f);
+        while (true)
+        {
+            if (radarScreen.activeSelf)
+                SetRadar(Satellite.instance.GetDistances());
+            yield return wait;
         }
     }
 }

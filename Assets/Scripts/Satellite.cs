@@ -1,13 +1,29 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Satellite : MonoBehaviour
 {
+    public static Satellite instance;
     public Transform EarthManager;
     public float orbitSpeed = 5f;
     public float orbitRadius = 500f;
     public float orbitTilt = 23.5f;
 
     private float angle = 0f;
+
+    public List<Transform> objectsInRadar;
+    private SphereCollider collider;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void Start()
+    {
+        collider = GetComponent<SphereCollider>();
+        objectsInRadar = new List<Transform>();
+    }
 
     void Update()
     {
@@ -23,5 +39,36 @@ public class Satellite : MonoBehaviour
 
         transform.rotation = targetRotation * Quaternion.Euler(90f, 0f, 0f);
         
+    }
+
+    void OnTriggerEnter( Collider other )
+    {
+        objectsInRadar.Add( other.transform );
+    }
+
+    void OnTriggerExit( Collider other )
+    {
+        if(objectsInRadar.Contains( other.transform ))
+            objectsInRadar.Remove( other.transform );
+    }
+
+    public Vector2[] GetDistances()
+    {
+        Vector2[] result = new Vector2[objectsInRadar.Count];
+        for(int i = 0; i < objectsInRadar.Count; i++)
+            result[i] = CalculateDistance( objectsInRadar[i] );
+
+        return result;
+    }
+
+    private Vector2 CalculateDistance(Transform target)
+    {
+        Vector3 relativePosition = target.position - transform.position;
+        
+        float maxDistance = collider.radius;
+        float normalizedX = (relativePosition.x / maxDistance) * 125f;
+        float normalizedZ = (relativePosition.z / maxDistance) * 125f;
+        
+        return new Vector2(normalizedX, normalizedZ);
     }
 }

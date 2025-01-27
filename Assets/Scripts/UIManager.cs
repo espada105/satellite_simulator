@@ -21,6 +21,10 @@ public class UIManager : MonoBehaviour
     public GameObject radarPrefab;
     public GameObject[] radarInstances;
     public Transform radarSprite;
+    public TMP_Text radarText;
+
+    public Image captureResultImage;
+    public GameObject captureLoadPanel;
 
     private Queue<GameObject> radarPool = new Queue<GameObject>();
     private const int INITIAL_POOL_SIZE = 10;
@@ -110,6 +114,7 @@ public class UIManager : MonoBehaviour
         }
 
         radarInstances = new GameObject[targets.Length];
+        radarText.text = targets.Length + " detected";
 
         while (radarPool.Count < targets.Length)
         {
@@ -136,5 +141,11 @@ public class UIManager : MonoBehaviour
                 SetRadar(Satellite.instance.GetDistances());
             yield return wait;
         }
+    }
+
+    public void CaptureImage()
+    {
+        captureLoadPanel.SetActive(true);
+        GMSManager.instance.CaptureImage(captureResultImage);
     }
 }

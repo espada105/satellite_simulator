@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpaceJunkOrbit : MonoBehaviour
 {
     public Transform earth;
-    public float orbitSpeed = 5f; // 공전 속도
+    public float orbitSpeed; // 공전 속도
     public float orbitTilt = 23.5f; // 궤도의 경사각
 
     private float orbitRadius; // 궤도 반경 (초기화 시 현재 거리로 고정)
@@ -11,6 +11,8 @@ public class SpaceJunkOrbit : MonoBehaviour
 
     void Start()
     {
+        orbitSpeed = Random.Range(1f, 3f);
+
         earth = FindObjectOfType<EarthManager>().GetComponent<Transform>();
         
         orbitRadius = Vector3.Distance(transform.position, earth.position);

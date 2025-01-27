@@ -8,7 +8,7 @@ public class GMSManager : MonoBehaviour
 {
     public static GMSManager instance;
 
-    public string apiKey;
+    private string apiKey;
     public float latitude = 37.3641f;        // 위도
     public float longitude = 127.0020f;     // 경도
     public int zoom = 16;                    // 줌 레벨 (1~21)

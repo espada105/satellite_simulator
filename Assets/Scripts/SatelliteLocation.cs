@@ -2,69 +2,141 @@ using UnityEngine;
 
 public class SatelliteLocation : MonoBehaviour
 {
-    public Transform EarthManager; // 지구 중심 Transform
-    public Vector3 NorthPole; // 북극 좌표
-    public float orbitSpeed = 5f; // 공전 속도
-    public float orbitRadius = 500f; // 궤도 반경
-    public float orbitTilt = 23.5f; // 궤도의 경사각
+    public Transform earthTransform;        // 지구 오브젝트 Transform
+    public Transform jejuReferencePoint;    // 제주도 위치 오브젝트 Transform
+    public Vector2 jejuLatitudeLongitude = new Vector2(33.4996f, 126.5312f); // 제주도 위도 경도
+    public Camera cameraToUse;              // 특정 카메라를 지정
+    public Color rayColor = Color.red;      // 레이 시각화 색상
+    public Color hitPointColor = Color.green; // 충돌 지점 색상
+    public float hitPointSize = 0.5f;       // 충돌 지점 Gizmo 크기
 
-    private float angle = 0f;
-    private Vector3 poleAxis;
-    private Vector3 normalizedPoleAxis;
-
-    void Start()
-    {
-        // 북극-지구 중심 축 계산
-        poleAxis = NorthPole - EarthManager.position;
-        normalizedPoleAxis = poleAxis.normalized;
-
-        // 초기 각도 설정
-        angle = Random.Range(0f, 360f);
-    }
+    private Vector3 lastHitPoint;           // 마지막으로 충돌한 지점
+    private bool hitDetected = false;       // 충돌 여부
 
     void Update()
     {
-        // 공전 각도 업데이트
-        angle += orbitSpeed * Time.deltaTime;
+        // 카메라의 forward 방향에서 레이 캐스트 발사
+        RaycastHit hit;
+        Ray ray = new Ray(cameraToUse.transform.position, cameraToUse.transform.forward); // 카메라의 forward 방향으로 레이 발사
 
-        // 궤도 위치 계산
-        Quaternion tiltRotation = Quaternion.Euler(orbitTilt, 0f, 0f);
-        Vector3 orbitPosition = tiltRotation * new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), 0f, Mathf.Sin(angle * Mathf.Deg2Rad)) * orbitRadius;
+        if (Physics.Raycast(ray, out hit))
+        {
+            // 레이가 지구의 표면에 충돌한 지점
+            lastHitPoint = hit.point;
+            hitDetected = true;
 
-        // 위성의 위치 갱신
-        transform.position = EarthManager.position + orbitPosition;
-
-        // 위성을 지구 중심으로 회전
-        Vector3 directionToEarth = (EarthManager.position - transform.position).normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(directionToEarth, Vector3.up);
-        transform.rotation = targetRotation * Quaternion.Euler(90f, 0f, 0f);
-
-        // 위도와 경도 계산
-        Vector2 latLong = CalculateLatitudeLongitude();
-
-        // 위도와 경도를 콘솔에 출력
-        Debug.Log($"Latitude: {latLong.x:F6}, Longitude: {latLong.y:F6}");
+            // 충돌 지점 색상 시각화
+            Debug.DrawLine(ray.origin, hit.point, rayColor);
+            Debug.DrawLine(jejuReferencePoint.position, hit.point, Color.blue);
+            // 구 표면상에서의 거리 계산
+            float earthRadius = Vector3.Distance(earthTransform.position, jejuReferencePoint.position);
+            float surfaceDist = CalculateSurfaceDistance(jejuReferencePoint.position, hit.point, earthRadius);
+        
+            Vector2 predictCoord =  PredictLatLong(jejuLatitudeLongitude.x, jejuLatitudeLongitude.y, surfaceDist);
+             Debug.Log("예측된 점 C의 위도: " + predictCoord.x + ", 경도: " + predictCoord.y);
+        }
+        else
+        {
+            hitDetected = false;
+        }
     }
 
-    private Vector2 CalculateLatitudeLongitude()
+    // 구 표면상의 거리를 계산하는 함수
+    private float CalculateSurfaceDistance(Vector3 b, Vector3 c, float radius)
     {
-        // 위성과 지구 중심 간의 상대 위치
-        Vector3 relativePosition = transform.position - EarthManager.position;
+        // 두 점의 위치 벡터를 정규화 (반지름이 1인 단위 벡터로 변환)
+        Vector3 normalizedB = b.normalized;
+        Vector3 normalizedC = c.normalized;
 
-        // 위도 계산 (북극 축 기준)
-        float dot = Vector3.Dot(relativePosition.normalized, normalizedPoleAxis);
-        float latitude = Mathf.Asin(dot) * Mathf.Rad2Deg;
+        // 두 벡터의 내적을 통해 cos(theta) 계산
+        float cosTheta = Vector3.Dot(normalizedB, normalizedC);
 
-        // 경도 계산 (북극 축과 수직인 평면 기준)
-        Vector3 relativeXZ = relativePosition - Vector3.Project(relativePosition, normalizedPoleAxis); // X-Z 평면 투영
-        float longitude = Mathf.Atan2(relativeXZ.z, relativeXZ.x) * Mathf.Rad2Deg;
+        // cos(theta) 값을 -1과 1 사이로 제한 (부동소수점 오차 방지)
+        cosTheta = Mathf.Clamp(cosTheta, -1f, 1f);
 
-        // 경도를 -180° ~ 180° 범위로 변환
-        if (longitude > 180f)
+        // 중심각 theta 계산 (라디안 단위)
+        float theta = Mathf.Acos(cosTheta);
+
+        // 구 표면상의 거리 계산 (d = r * theta)
+        float surfaceDistance = radius * theta;
+
+        return surfaceDistance;
+    }
+
+    private Vector2 PredictLatLong(float latB, float lonB, float d)
+    {
+        // 거리를 중심각으로 변환 (라디안 단위)
+        float earthRadius = Vector3.Distance(earthTransform.position, jejuReferencePoint.position);
+        float theta = d / earthRadius;
+
+        // 방위각 계산
+        float azimuth = CalculateAzimuth(jejuReferencePoint.position, lastHitPoint);
+
+        // 점 B의 위도와 경도를 라디안으로 변환
+        float latBRad = latB * Mathf.Deg2Rad;
+        float lonBRad = lonB * Mathf.Deg2Rad;
+        float azimuthRad = azimuth * Mathf.Deg2Rad;
+
+        // 점 C의 위도 계산
+        float latCRad = Mathf.Asin(Mathf.Sin(latBRad) * Mathf.Cos(theta) +
+                           Mathf.Cos(latBRad) * Mathf.Sin(theta) * Mathf.Cos(azimuthRad));
+
+        // 점 C의 경도 계산
+        float lonCRad = lonBRad + Mathf.Atan2(Mathf.Sin(azimuthRad) * Mathf.Sin(theta) * Mathf.Cos(latBRad),
+                                              Mathf.Cos(theta) - Mathf.Sin(latBRad) * Mathf.Sin(latCRad));
+
+        // 라디안을 도 단위로 변환
+        float latC = latCRad * Mathf.Rad2Deg;
+        float lonC = lonCRad * Mathf.Rad2Deg;
+        lonC = NormalizeLongitude(lonC);
+
+        Debug.Log($"Distance: {d}, Azimuth: {azimuth}");
+        return new Vector2(latC, lonC);
+    }
+
+    private float CalculateAzimuth(Vector3 pointB, Vector3 pointC)
+    {
+        // 지구 중심을 기준으로 한 상대 벡터
+        Vector3 centerToB = (pointB - earthTransform.position).normalized;
+        Vector3 centerToC = (pointC - earthTransform.position).normalized;
+
+        // 북쪽 방향 벡터 (지구의 up 벡터)
+        Vector3 north = earthTransform.up;
+
+        // pointB에서의 접평면 상의 벡터들
+        Vector3 tangentNorth = Vector3.ProjectOnPlane(north, centerToB).normalized;
+        Vector3 toPointC = Vector3.ProjectOnPlane(centerToC - centerToB, centerToB).normalized;
+
+        // 방위각 계산
+        float angle = Vector3.SignedAngle(tangentNorth, toPointC, centerToB);
+        
+        // 각도를 0-360도 범위로 변환
+        if (angle < 0)
+            angle += 360f;
+
+        return angle;
+    }
+
+    private float NormalizeLongitude(float longitude)
+    {
+        while (longitude > 180f)
+        {
             longitude -= 360f;
-        else if (longitude < -180f)
+        }
+        while (longitude < -180f)
+        {
             longitude += 360f;
+        }
+        return longitude;
+    }
 
-        return new Vector2(latitude, longitude);
+    // 충돌 지점에 Gizmo 표시
+    void OnDrawGizmos()
+    {
+        if (hitDetected)
+        {
+            Gizmos.color = hitPointColor;
+            Gizmos.DrawSphere(lastHitPoint, hitPointSize);
+        }
     }
 }

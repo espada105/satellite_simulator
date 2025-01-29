@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Radar.unity
+    guid: 6b3e532a5d2d1bc40b3111e4cbd9c03c
+  - enabled: 1
     path: Assets/Scenes/PythonFind.unity
     guid: d4508d1f0315b0e4fbc1e03e8208d4f6
   - enabled: 1

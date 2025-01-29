@@ -29,6 +29,11 @@ public class UIManager : MonoBehaviour
     private Queue<GameObject> radarPool = new Queue<GameObject>();
     private const int INITIAL_POOL_SIZE = 10;
 
+    public TMP_Text coordinateText;
+
+    public TMP_Text zoomText;
+    public Slider zoomSlider;
+
     void Start()
     {
         InitializeRadarPool();
@@ -147,5 +152,15 @@ public class UIManager : MonoBehaviour
     {
         captureLoadPanel.SetActive(true);
         GMSManager.instance.CaptureImage(captureResultImage);
+    }
+
+    public void UpdateCoordinate(Vector2 target)
+    {
+        coordinateText.text = $"Latitude\n{target.x:F6}\nLongitude\n{target.y:F6}";
+    }
+
+    public void UpdateZoomText()
+    {
+        zoomText.text = zoomSlider.value.ToString();
     }
 }

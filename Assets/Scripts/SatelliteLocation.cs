@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class SatelliteLocation : MonoBehaviour
 {
@@ -12,6 +13,35 @@ public class SatelliteLocation : MonoBehaviour
 
     private Vector3 lastHitPoint;           // 마지막으로 충돌한 지점
     private bool hitDetected = false;       // 충돌 여부
+
+    private UIManager ui;
+    private GMSManager gms;
+
+    private void Start()
+    {
+        ui = FindObjectOfType<UIManager>();
+        gms = FindObjectOfType<GMSManager>();
+        StartCoroutine(UpdateCoordinateRoutine());
+    }
+
+    private IEnumerator UpdateCoordinateRoutine()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.1f);
+        
+        while (true)
+        {
+            if (hitDetected)
+            {
+                float earthRadius = Vector3.Distance(earthTransform.position, jejuReferencePoint.position);
+                float surfaceDist = CalculateSurfaceDistance(jejuReferencePoint.position, lastHitPoint, earthRadius);
+                Vector2 predictCoord = PredictLatLong(jejuLatitudeLongitude.x, jejuLatitudeLongitude.y, surfaceDist);
+                ui.UpdateCoordinate(predictCoord);
+                gms.latitude = predictCoord.x;
+                gms.longitude = predictCoord.y;
+            }
+            yield return wait;
+        }
+    }
 
     void Update()
     {
@@ -33,7 +63,7 @@ public class SatelliteLocation : MonoBehaviour
             float surfaceDist = CalculateSurfaceDistance(jejuReferencePoint.position, hit.point, earthRadius);
         
             Vector2 predictCoord =  PredictLatLong(jejuLatitudeLongitude.x, jejuLatitudeLongitude.y, surfaceDist);
-             Debug.Log("예측된 점 C의 위도: " + predictCoord.x + ", 경도: " + predictCoord.y);
+            Debug.Log("예측된 점 C의 위도: " + predictCoord.x + ", 경도: " + predictCoord.y);
         }
         else
         {
@@ -90,7 +120,6 @@ public class SatelliteLocation : MonoBehaviour
         float lonC = lonCRad * Mathf.Rad2Deg;
         lonC = NormalizeLongitude(lonC);
 
-        Debug.Log($"Distance: {d}, Azimuth: {azimuth}");
         return new Vector2(latC, lonC);
     }
 

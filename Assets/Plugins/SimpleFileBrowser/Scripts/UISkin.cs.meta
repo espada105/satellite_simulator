@@ -1,15 +1,5 @@
 fileFormatVersion: 2
 guid: 66bc3ce4885990c40a88f80fe0ad0101
-timeCreated: 1634711050
-licenseType: Store
-MonoImporter:
-  serializedVersion: 2
-  defaultReferences: []
-  executionOrder: 0
-  icon: {instanceID: 0}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 113006
@@ -17,3 +7,31 @@ AssetOrigin:
   packageVersion: 1.6.4
   assetPath: Assets/Plugins/SimpleFileBrowser/Scripts/UISkin.cs
   uploadId: 649298
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_font: {instanceID: 0}
+  - m_windowResizeGizmo: {instanceID: 0}
+  - m_headerBackButton: {instanceID: 0}
+  - m_headerForwardButton: {instanceID: 0}
+  - m_headerUpButton: {instanceID: 0}
+  - m_headerContextMenuButton: {instanceID: 0}
+  - m_inputFieldBackground: {instanceID: 0}
+  - m_buttonBackground: {instanceID: 0}
+  - m_dropdownBackground: {instanceID: 0}
+  - m_dropdownArrow: {instanceID: 0}
+  - m_dropdownCheckmark: {instanceID: 0}
+  - m_toggleBackground: {instanceID: 0}
+  - m_toggleCheckmark: {instanceID: 0}
+  - m_folderIcon: {instanceID: 0}
+  - m_driveIcon: {instanceID: 0}
+  - m_defaultFileIcon: {instanceID: 0}
+  - m_fileMultiSelectionToggleOffIcon: {instanceID: 0}
+  - m_fileMultiSelectionToggleOnIcon: {instanceID: 0}
+  - m_popupPanelsBackground: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using TMPro;
 using Debug = UnityEngine.Debug;  // UnityEngine.Debug를 Debug로 명시적 사용
+using UnityEngine.UI;
 
 public class SiftFeatureMatching : MonoBehaviour
 {
@@ -14,22 +15,28 @@ public class SiftFeatureMatching : MonoBehaviour
 
     public TextMeshProUGUI matchPercentageText;
 
-    void Start()
+    public static SiftFeatureMatching instance;
+
+    void Awake()
     {
-        // Python 스크립트를 먼저 실행하고 결과를 처리
+        instance = this;
+    }
+
+    public void StartPython()
+    {
         StartCoroutine(RunPythonAndUpdateUI());
     }
 
-    IEnumerator RunPythonAndUpdateUI()
+    private IEnumerator RunPythonAndUpdateUI()
     {
-        // Python 실행
         yield return StartCoroutine(RunPythonScript());
 
-        // JSON 읽기 및 UI 업데이트
         if (File.Exists(Path.GetFullPath(outputPath)))
         {
             string jsonContent = File.ReadAllText(Path.GetFullPath(outputPath));
             SiftOutput result = JsonUtility.FromJson<SiftOutput>(jsonContent);
+
+            UIManager.instance.SetResult(result.match_percentage);
 
             UnityEngine.Debug.Log($"Keypoints in Image1: {result.keypoints1}");
             UnityEngine.Debug.Log($"Keypoints in Image2: {result.keypoints2}");
@@ -47,20 +54,14 @@ public class SiftFeatureMatching : MonoBehaviour
         }
     }
 
-    IEnumerator RunPythonScript()
+    private IEnumerator RunPythonScript()
     {
-        string fullPythonFilePath = Path.GetFullPath(pythonFilePath);
-        string fullImage1Path = Path.GetFullPath(image1Path);
-        string fullImage2Path = Path.GetFullPath(image2Path);
-        string fullOutputPath = Path.GetFullPath(outputPath);
-
         string pythonPath = PythonPathFinder.GetPythonPath( );
-        Debug.Log( "Current Python Path : " + pythonPath );
-
+        
         ProcessStartInfo start = new ProcessStartInfo
         {
             FileName = pythonPath,
-            Arguments = $"{fullPythonFilePath} {fullImage1Path} {fullImage2Path} {fullOutputPath}",
+            Arguments = $"",
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -68,24 +69,39 @@ public class SiftFeatureMatching : MonoBehaviour
         };
 
         bool isCompleted = false;
+        Process process = null;
 
         try
         {
-            using (Process process = Process.Start(start))
+            process = Process.Start(start);
+            process.OutputDataReceived += (sender, args) => 
             {
-                process.OutputDataReceived += (sender, args) => UnityEngine.Debug.Log("Python Output: " + args.Data);
-                process.ErrorDataReceived += (sender, args) => UnityEngine.Debug.LogError("Python Errors: " + args.Data);
+                if (args.Data != null)
+                {
+                    UnityEngine.Debug.Log("Python Output: " + args.Data);
+                }
+            };
 
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
+            process.ErrorDataReceived += (sender, args) => 
+                UnityEngine.Debug.LogError("Python Errors: " + args.Data);
 
-                process.WaitForExit();
-                isCompleted = true;
-            }
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
         }
         catch (System.Exception ex)
         {
             UnityEngine.Debug.LogError("Failed to run Python script: " + ex.Message);
+        }
+
+        while (process != null && !process.HasExited)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (process != null)
+        {
+            process.WaitForExit();
+            isCompleted = true;
         }
 
         if (isCompleted)

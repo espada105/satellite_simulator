@@ -63,7 +63,6 @@ public class SatelliteLocation : MonoBehaviour
             float surfaceDist = CalculateSurfaceDistance(jejuReferencePoint.position, hit.point, earthRadius);
         
             Vector2 predictCoord =  PredictLatLong(jejuLatitudeLongitude.x, jejuLatitudeLongitude.y, surfaceDist);
-            Debug.Log("예측된 점 C의 위도: " + predictCoord.x + ", 경도: " + predictCoord.y);
         }
         else
         {

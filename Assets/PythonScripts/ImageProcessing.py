@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import os
+import base64  # base64 모듈 추가
 
 def install_dependencies(venv_python):
     """필요한 모듈 설치 및 디버깅 정보 출력"""
@@ -75,6 +76,8 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
     venv_path = os.path.join(script_dir, ".venv")
 
+    
+
     if sys.prefix != venv_path:
         # 현재 Python이 가상환경이 아닌 경우, 가상환경으로 스크립트 실행
         activate_and_run()
@@ -130,9 +133,35 @@ if __name__ == "__main__":
             print(f"Results saved to {output_path}")
 
         # 이미지 경로 및 JSON 저장 경로를 상대 경로로 설정
-        image1_path = os.path.join(script_dir, "Ralo.jpg")
-        image2_path = os.path.join(script_dir, "Ralo.jpg")
+        image1_path = os.path.join(script_dir, "..", "Resources", "image1.jpg")
+        image2_path = os.path.join(script_dir, "..", "Resources", "image2.jpg")
         output_path = os.path.join(script_dir, "..", "Resources", "output.json")  # Resources 폴더에 json파일 저장
         output_image_path = os.path.join(script_dir, "..", "Resources", "output_image.jpg") # Resources 폴더에 이미지 저장
+
+        path = os.path.expandvars(r"%USERPROFILE%\AppData\LocalLow\DefaultCompany\satellite_simulator")
+
+        image1_base64 = ""
+        image2_base64 = ""
+
+        try:
+            with open(os.path.join(path, "image1.txt"), "r") as file:
+                image1_base64 = file.read().strip()
+            
+            with open(os.path.join(path, "image2.txt"), "r") as file:
+                image2_base64 = file.read().strip()
+            
+            image1_bytes = base64.b64decode(image1_base64)
+            image2_bytes = base64.b64decode(image2_base64)
+            
+            with open(image1_path, "wb") as file:
+                file.write(image1_bytes)
+            
+            with open(image2_path, "wb") as file:
+                file.write(image2_bytes)
+            
+            print("Images decoded and saved successfully")
+            
+        except Exception as e:
+            print(f"Error processing images: {str(e)}")
 
         feature_matching_with_sift(image1_path, image2_path, output_path)

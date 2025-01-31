@@ -114,9 +114,7 @@ if __name__ == "__main__":
             print(f"Match Percentage: {match_percentage:.2f}%")
 
             result = cv2.drawMatches(image1, keypoints1, image2, keypoints2, good_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-            cv2.imshow("SIFT Feature Matching", result)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            cv2.imwrite(output_image_path, result)
 
             # JSON 결과 저장
             result_data = {
@@ -134,6 +132,7 @@ if __name__ == "__main__":
         # 이미지 경로 및 JSON 저장 경로를 상대 경로로 설정
         image1_path = os.path.join(script_dir, "Ralo.jpg")
         image2_path = os.path.join(script_dir, "Ralo.jpg")
-        output_path = os.path.join(script_dir, "..", "Resources", "output.json")  # Resources 폴더에 저장
+        output_path = os.path.join(script_dir, "..", "Resources", "output.json")  # Resources 폴더에 json파일 저장
+        output_image_path = os.path.join(script_dir, "..", "Resources", "output_image.jpg") # Resources 폴더에 이미지 저장
 
         feature_matching_with_sift(image1_path, image2_path, output_path)
